@@ -9,6 +9,7 @@ transition_choices = ['emptyA', 'emptyB', 'fillA', 'fillB', 'transferAB', 'trans
 found_solution = False
 
 
+# Initialization function
 def init():
     global n, m, k, initial_state
     n = int(input("Enter first bowl size: "))
@@ -18,39 +19,63 @@ def init():
     old_states.append(initial_state)
 
 
+# Check if a state is final state
 def is_final_state(state):
     if state[0] == k or state[1] == k:
         return True
     return False
 
 
-def transition(state, choice):
-    if choice == 'fillA':
-        return n, state[1]
-    if choice == 'fillB':
-        return state[0], m
-    if choice == 'emptyA':
+# Transitions
+def empty(state, vase):
+    if vase == 0:
         return 0, state[1]
-    if choice == 'emptyB':
+    if vase == 1:
         return state[0], 0
-    if choice == 'transferBA':
+
+
+def fill(state, vase):
+    if vase == 0:
+        return n, state[1]
+    if vase == 1:
+        return state[0], m
+
+
+def transfer(state, vase):
+    if vase == 0:
         diff = min(n - state[0], state[1])
         return state[0] + diff, state[1] - diff
-    if choice == 'transferAB':
+    if vase == 1:
         diff = min(m - state[1], state[0])
         return state[0] - diff, state[1] + diff
+
+
+def transition(state, choice):
+    if choice == 'fillA':
+        return fill(state, 0)
+    if choice == 'fillB':
+        return fill(state, 1)
+    if choice == 'emptyA':
+        return empty(state, 0)
+    if choice == 'emptyB':
+        return empty(state, 1)
+    if choice == 'transferBA':
+        return transfer(state, 0)
+    if choice == 'transferAB':
+        return transfer(state, 1)
     raise Exception('Invalid transfer choice!')
 
 
+# Check if a state is valid
 def is_valid(state):
     return 0 <= state[0] <= n and 0 <= state[1] <= m
 
 
 def print_solution(path):
     print("Transitions:")
-    for i in range(0, len(old_states) - 1):
-        print(old_states[i], " ", applied_operations[i], " ", old_states[i + 1])
-    print("Final state: ", old_states[len(old_states) - 1])
+    for i in range(0, len(path) - 1):
+        print(path[i], " ", applied_operations[i], " ", path[i + 1])
+    print("Final state: ", path[len(path) - 1])
 
 
 def bkt(curr_state):
@@ -70,12 +95,46 @@ def bkt(curr_state):
                     applied_operations.remove(choice)
 
 
+def print_solution_bfs(path):
+    global applied_operations
+    new_path = []
+    new_ops = []
+    curr_index = len(path) - 1
+    curr_state = path[curr_index]
+    prev_state = None
+
+    while curr_state != (0, 0):
+        if prev_state is not None:
+            curr_state = prev_state
+        op = applied_operations[curr_index - 1]
+        new_path.append(curr_state)
+        new_ops.append(op)
+        if op == 'emptyA':
+            op = 'fillA'
+        elif op == 'emptyB':
+            op = 'fillB'
+        elif op == 'fillA':
+            op = 'emptyA'
+        elif op == 'fillB':
+            op = 'emptyB'
+        elif op == 'transferAB':
+            op = 'transferBA'
+        elif op == 'transferBA':
+            op = 'transferAB'
+        prev_state = transition(curr_state, op)
+        curr_index = path.index(prev_state)
+    new_ops.pop()
+    applied_operations = new_ops[::-1]
+    print_solution(new_path[::-1])
+
+
 def bfs(starting_state):
-    global old_states, found_solution
+    global old_states, applied_operations, found_solution
 
     queue = deque()
     operation_queue = deque()
     old_states = []
+    applied_operations = []
     path = []
     curr_operation = ''
     queue.append(starting_state)
@@ -98,7 +157,8 @@ def bfs(starting_state):
 
         if is_final_state(curr_state):
             found_solution = True
-            print_solution(path)
+            print(path)
+            print_solution_bfs(path)
             break
 
         queue.append(transition(curr_state, 'fillA'))
