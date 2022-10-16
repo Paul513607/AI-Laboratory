@@ -1,4 +1,5 @@
 import math
+import random
 from collections import deque
 
 n, m, k = 0, 0, 0
@@ -180,6 +181,121 @@ def bfs(starting_state):
         iteration += 1
 
 
+def eval(state):
+    return abs(state[0] - k) + abs(state[1] - k)
+
+
+def get_neighbours(curr_state, prev_state):
+    neighbours = []
+    for choice in transition_choices:
+        next_state = transition(prev_state, choice)
+        if is_valid(next_state) and next_state != curr_state:
+            neighbours.append(next_state)
+    return neighbours
+
+
+def mutate(curr_state, counter=0):
+    index = random.randint(0, len(transition_choices) - 1)
+    next_state = transition(curr_state, transition_choices[index])
+    if is_valid(next_state):
+        return next_state
+    elif counter < len(transition_choices) * 2:
+        return mutate(curr_state, counter + 1)
+
+
+def hill_climbing(starting_state):
+    global found_solution
+    prev_state = starting_state
+    has_improved = True
+    max_state = starting_state
+    while has_improved and not found_solution:
+        has_improved = False
+        max_state = mutate(prev_state)
+        fitness = eval(max_state)
+        for candidate in get_neighbours(max_state, prev_state):
+            if candidate in old_states:
+                continue
+            candidate_fitness = eval(candidate)
+            if candidate_fitness <= fitness:
+                max_state = candidate
+                fitness = candidate_fitness
+                has_improved = True
+            old_states.append(candidate)
+            if is_final_state(candidate):
+                found_solution = True
+                break
+        prev_state = max_state
+    print(old_states)
+    return max_state
+
+
+def distance(curr_state, next_state):
+    return abs(curr_state[0] - next_state[0]) + abs(curr_state[1] - next_state[1])
+
+
+def get_lowest_scoring_node(open_set, f_score):
+    minimum_value = 2 << 32
+    minima = None
+    for item in open_set:
+        if f_score[item] < minimum_value:
+            minimum_value = f_score[item]
+            minima = item
+    return minima
+
+
+def get_next_states(curr_state):
+    next_states = []
+    for choice in transition_choices:
+        next_state = transition(curr_state, choice)
+        if is_valid(next_state):
+            next_states.append(next_state)
+    return next_states
+
+
+def rebuild_path(came_from, curr_state):
+    path = [curr_state]
+    while curr_state in came_from:
+        curr_state = came_from[curr_state]
+        path.append(curr_state)
+    return path[::-1]
+
+
+def a_star(start_state):
+    global found_solution, old_states
+
+    open_set = {start_state}
+    came_from = {}
+    g_score = {start_state: 0}
+    f_score = {start_state: eval(start_state)}
+    old_states = []
+
+    while len(open_set) > 0:
+        curr_state = get_lowest_scoring_node(open_set, f_score)
+        old_states.append(curr_state)
+        if is_final_state(curr_state):
+            found_solution = True
+            print(rebuild_path(came_from, curr_state))
+            print(old_states)
+            break
+
+        open_set.remove(curr_state)
+        for neighbor in get_next_states(curr_state):
+            if neighbor in old_states:
+                continue
+
+            if neighbor not in g_score:
+                g_score[neighbor] = 2 << 32
+                f_score[neighbor] = 2 << 32
+
+            tentative_g_score = g_score[curr_state] + distance(curr_state, neighbor)
+            if tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = curr_state
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = tentative_g_score + eval(neighbor)
+                if neighbor not in open_set:
+                    open_set.add(neighbor)
+
+
 def is_there_solution():
     if n + m < k:
         return False
@@ -204,17 +320,17 @@ if __name__ == '__main__':
     selected_alg_value = int(input("""Select the number for the algorithm that solves the problem:
           1 - Backtracking
           2 - Breadth First Search
-          3 - Hillclimbing (NYI)
-          4 - A* (NYI)
+          3 - Hillclimbing
+          4 - A*
           """))
     if selected_alg_value == 1:
         bkt(initial_state)
     elif selected_alg_value == 2:
         bfs(initial_state)
     elif selected_alg_value == 3:
-        print('NYI')
+        hill_climbing(initial_state)
     elif selected_alg_value == 4:
-        print('NYI')
+        a_star(initial_state)
     else:
         print('No option selected!')
         exit(1)
