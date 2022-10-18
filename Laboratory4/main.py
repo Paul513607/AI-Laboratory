@@ -22,4 +22,5 @@ if __name__ == '__main__':
 
     my_board = board.PlayingBoard(size, blocked_positions)
     print(my_board.board)
-    print(my_board.variables)
+    for key, value in my_board.variables.items():
+        print(f"{key}: ", value)

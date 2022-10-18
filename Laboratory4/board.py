@@ -14,4 +14,4 @@ class PlayingBoard:
         for position in blocked_positions:
             self.board[position[0], position[1]] = -1
         for i in range(0, size):
-            self.variables[i] = [(i, j) for j in range(size) if self.board[j, i] != -1]
+            self.variables[i] = [(j, i) for j in range(size) if self.board[j, i] != -1]
