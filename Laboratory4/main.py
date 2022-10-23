@@ -1,3 +1,4 @@
+import algorithm
 import board
 import parser
 
@@ -21,6 +22,8 @@ if __name__ == '__main__':
         size, blocked_positions = parser.parse(filename)
 
     my_board = board.PlayingBoard(size, blocked_positions)
-    print(my_board.board)
-    for key, value in my_board.variables.items():
-        print(f"{key}: ", value)
+    # print(my_board.board)
+    # for key, value in my_board.variables.items():
+    #     print(f"{key}: ", value)
+
+    algorithm.forward_check(my_board, 0)

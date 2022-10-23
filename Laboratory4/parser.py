@@ -9,7 +9,8 @@ def parse(filename):
     num1 = int(line[index + 1:index1]) - 1
     index2 = line.find(']')
     num2 = int(line[index1 + 1:index2]) - 1
-    blocked_positions.append((num1, num2))
+    if 0 <= num1 < size and 0 <= num2 < size:
+        blocked_positions.append((num1, num2))
 
     while line:
         line = file.readline()
@@ -22,6 +23,7 @@ def parse(filename):
         num1 = int(line[index + 1:index1]) - 1
         index2 = line.find(']')
         num2 = int(line[index1 + 1:index2]) - 1
-        blocked_positions.append((num1, num2))
+        if 0 <= num1 < size and 0 <= num2 < size:
+            blocked_positions.append((num1, num2))
 
     return size, blocked_positions
