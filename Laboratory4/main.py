@@ -1,4 +1,5 @@
 import algorithm
+import backtracking
 import board
 import parser
 
@@ -26,4 +27,5 @@ if __name__ == '__main__':
     # for key, value in my_board.variables.items():
     #     print(f"{key}: ", value)
 
+    # backtracking.solveNQUtil(my_board, 0)
     algorithm.forward_check(my_board, 0)
