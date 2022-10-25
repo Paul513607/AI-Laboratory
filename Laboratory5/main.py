@@ -16,7 +16,6 @@ if __name__ == '__main__':
         player2 = Player(arr2[1:])
 
         size = len(arr1) - 1
-        line = line2
         game = Game((size, size), player1, player2)
         for i in range(0, size):
             line = fd.readline()
