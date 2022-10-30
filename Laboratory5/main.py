@@ -29,5 +29,7 @@ if __name__ == '__main__':
         print(game.game_states)
 
         print(game.get_b_scores_for_a_move('Left'))
+        print(game.get_a_scores_for_a_move('Left'))
         print(game.get_a_scores_for_b_move('Down'))
+        print(game.get_b_scores_for_b_move('Down'))
 

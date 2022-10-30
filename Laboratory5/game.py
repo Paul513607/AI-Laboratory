@@ -16,3 +16,11 @@ class Game:
     def get_a_scores_for_b_move(self, b_move):
         index = self.player2.possible_moves.index(b_move)
         return [tup[0] for tup in self.game_states.T[index]]
+
+    def get_a_scores_for_a_move(self, a_move):
+        index = self.player1.possible_moves.index(a_move)
+        return [tup[0] for tup in self.game_states[index]]
+
+    def get_b_scores_for_b_move(self, b_move):
+        index = self.player2.possible_moves.index(b_move)
+        return [tup[1] for tup in self.game_states.T[index]]
