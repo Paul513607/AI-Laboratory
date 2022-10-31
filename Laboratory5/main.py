@@ -22,7 +22,8 @@ if __name__ == '__main__':
             line = re.sub(r"\s+", '-', line.strip())
             line = line.split('-')
             for j in range(0, size):
-                game.game_states[i, j] = (int(line[j][0]), int(line[j][2]))
+                nums = line[j].split('/')
+                game.game_states[i, j] = (int(nums[0]), int(nums[1]))
         print(player1.possible_moves)
         print(player2.possible_moves)
         print(game.game_states)
@@ -31,10 +32,10 @@ if __name__ == '__main__':
         # print(game.get_a_scores_for_a_move('Left'))
         # print(game.get_a_scores_for_b_move('Down'))
         # print(game.get_b_scores_for_b_move('Down'))
-        print(game.get_b_scores_for_a_move('A'))
-        print(game.get_a_scores_for_a_move('A'))
-        print(game.get_a_scores_for_b_move('V'))
-        print(game.get_b_scores_for_b_move('V'))
+        # print(game.get_b_scores_for_a_move('A'))
+        # print(game.get_a_scores_for_a_move('A'))
+        # print(game.get_a_scores_for_b_move('V'))
+        # print(game.get_b_scores_for_b_move('V'))
         # for idx, move in enumerate(game.player2.possible_moves):
         #     best_player_1_move = max(game.player1.possible_moves, key=lambda x: game.get_a_scores_for_a_move(x)[idx])
         #     best_moves_p1 = list(filter(
