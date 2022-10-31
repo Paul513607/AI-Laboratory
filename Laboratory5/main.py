@@ -49,4 +49,6 @@ if __name__ == '__main__':
         #         game.player2.possible_moves))
         #     print('For players 1 move ', move, ' the best player2 moves are', best_moves_p2)
         #
-        print(game.find_pure_nash_equilibrium())
+        print("Dominant strategies for Player 1: ", game.find_dominant_strats_for_a())
+        print("Dominant strategies for Player 2: ", game.find_dominant_strats_for_b())
+        print("Nash equilibrium moves: ", game.find_pure_nash_equilibrium())
