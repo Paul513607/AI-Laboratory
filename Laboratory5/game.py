@@ -25,7 +25,7 @@ class Game:
         index = self.player2.possible_moves.index(b_move)
         return [tup[1] for tup in self.game_states.T[index]]
 
-    def find_dominant_strats_for_a(self):
+    def find_max_sum_move_for_a(self):
         scores = {}
         for idx, move in enumerate(self.player1.possible_moves):
             curr_move_values = list(map(lambda tup: tup[0], self.game_states[idx]))
@@ -33,14 +33,35 @@ class Game:
         max_key = max(scores, key=scores.get)
         return [(x, y) for x, y in scores.items() if y == scores.get(max_key)]
 
-    def find_dominant_strats_for_b(self):
+    def find_max_sum_move_for_b(self):
         scores = {}
         game_states_transpose = self.game_states.T
-        for idx, move in enumerate(self.player1.possible_moves):
+        for idx, move in enumerate(self.player2.possible_moves):
             curr_move_values = list(map(lambda tup: tup[1], game_states_transpose[idx]))
             scores[move] = sum(curr_move_values)
         max_key = max(scores, key=scores.get)
         return [(x, y) for x, y in scores.items() if y == scores.get(max_key)]
+
+    def find_dominant_strats_for_a(self):
+        dominant_strats = []
+        for idx, move in enumerate(self.player1.possible_moves):
+            is_dominant_strat = all(list(map(lambda tup: tup[0] >= tup[1], self.game_states[idx])))
+            if is_dominant_strat:
+                dominant_strats.append(move)
+        if len(dominant_strats) == 0:
+            return "No dominant strategies for Player 1."
+        return dominant_strats
+
+    def find_dominant_strats_for_b(self):
+        dominant_strats = []
+        game_states_transpose = self.game_states.T
+        for idx, move in enumerate(self.player2.possible_moves):
+            is_dominant_strat = all(list(map(lambda tup: tup[1] >= tup[0], game_states_transpose[idx])))
+            if is_dominant_strat:
+                dominant_strats.append(move)
+        if len(dominant_strats) == 0:
+            return "No dominant strategies for Player 2."
+        return dominant_strats
 
     def find_pure_nash_equilibrium(self):
         best_moves_p1 = {}
