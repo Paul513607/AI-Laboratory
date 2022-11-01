@@ -1,4 +1,5 @@
 import numpy as np
+from operator import itemgetter
 
 
 class Game:
@@ -31,7 +32,7 @@ class Game:
             curr_move_values = list(map(lambda tup: tup[0], self.game_states[idx]))
             scores[move] = sum(curr_move_values)
         max_key = max(scores, key=scores.get)
-        return [(x, y) for x, y in scores.items() if y == scores.get(max_key)]
+        return [(x, y / len(self.player1.possible_moves)) for x, y in scores.items() if y == scores.get(max_key)]
 
     def find_max_sum_move_for_b(self):
         scores = {}
@@ -40,7 +41,7 @@ class Game:
             curr_move_values = list(map(lambda tup: tup[1], game_states_transpose[idx]))
             scores[move] = sum(curr_move_values)
         max_key = max(scores, key=scores.get)
-        return [(x, y) for x, y in scores.items() if y == scores.get(max_key)]
+        return [(x, y / len(self.player2.possible_moves)) for x, y in scores.items() if y == scores.get(max_key)]
 
     def find_dominant_strats_for_a(self):
         dominant_strats = []
@@ -62,6 +63,29 @@ class Game:
         if len(dominant_strats) == 0:
             return "No dominant strategies for Player 2."
         return dominant_strats
+
+    def find_dom_strat_for_a(self):
+        cols = []
+        for idx, move in enumerate(self.player1.possible_moves):
+            scores = [(self.game_states[idx, j][0], j) for j in range(0, len(self.game_states[idx]))]
+            max_score, col = max(scores, key=itemgetter(0))
+            cols.append((move, col))
+        for idx in range(1, len(cols)):
+            if cols[idx][1] != cols[idx - 1][1]:
+                return "No dominant strategies for Player 1"
+        return cols[0][0]
+
+    def find_dom_strat_for_b(self):
+        cols = []
+        game_states_transponse = self.game_states.T
+        for idx, move in enumerate(self.player2.possible_moves):
+            scores = [(game_states_transponse[idx, j][1], j) for j in range(0, len(game_states_transponse[idx]))]
+            max_score, col = max(scores, key=itemgetter(1))
+            cols.append((move, col))
+        for idx in range(1, len(cols)):
+            if cols[idx][1] != cols[idx - 1][1]:
+                return "No dominant strategies for Player 2"
+        return cols[0][0]
 
     def find_pure_nash_equilibrium(self):
         best_moves_p1 = {}
