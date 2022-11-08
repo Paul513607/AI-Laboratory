@@ -21,4 +21,4 @@ def iris_name_to_number(flower_name):
     if flower_name == "Iris-versicolor":
         return 1
     if flower_name == "Iris-virginica":
-        return 1
+        return 2

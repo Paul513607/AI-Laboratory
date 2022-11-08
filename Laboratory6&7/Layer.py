@@ -11,7 +11,6 @@ class Layer:
     biases: np.ndarray
     layer_activation: np.ndarray
     layer_error: np.ndarray
-    layer_friction: np.ndarray
     cost_gradient_w: np.ndarray
     cost_gradient_b: np.ndarray
 
@@ -19,7 +18,6 @@ class Layer:
         self.layer_error = None
         self.cost_gradient_w = None
         self.cost_gradient_b = None
-        self.layer_friction = None
         self.layer_activation = np.zeros((1, 1))
         self.nr_of_inputs = nr_nodes_in
         self.nr_of_neurons = nr_nodes_out
@@ -35,3 +33,10 @@ class Layer:
         for row in output:
             activation += [activation_function(row)]
         self.layer_activation = np.row_stack(activation)
+
+    def compute_activation(self, training_input: np.ndarray, activation_function: Callable[[np.ndarray], np.ndarray]):
+        output = self.calculate_output(training_input)
+        return activation_function(output)
+
+
+
