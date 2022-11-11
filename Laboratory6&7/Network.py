@@ -7,10 +7,10 @@ from Layer import Layer
 
 
 class Network:
-    layer_sizes: list[int]
+    layer_sizes: [int]
     learning_rate: float
     nr_of_epochs: int
-    layers: list[Layer]
+    layers: [Layer]
 
     def __init__(self, layer_sizes, learning_rate, nr_of_epochs):
         self.layer_sizes = layer_sizes
@@ -64,14 +64,17 @@ class Network:
             utils.number_to_number_array(target, output_layer.nr_of_neurons))
         output_layer.cost_gradient_w = hidden_layer.layer_activation.T @ last_layer_delta
         output_layer.cost_gradient_b = last_layer_delta
+
         output_layer.weights -= self.learning_rate * output_layer.cost_gradient_w
         output_layer.biases -= self.learning_rate * output_layer.cost_gradient_b
 
         hidden_layer_delta = self.compute_hidden_layer_delta(last_layer_delta)
         hidden_layer.cost_gradient_w = first_layer_input.T @ hidden_layer_delta
         hidden_layer.cost_gradient_b = hidden_layer_delta
+
         hidden_layer.weights -= self.learning_rate * hidden_layer.cost_gradient_w
         hidden_layer.biases -= self.learning_rate * hidden_layer.cost_gradient_b
+
 
     def online_training(self, training_data: np.ndarray,
                         activation_function: Callable[[np.ndarray], np.ndarray]):
@@ -108,6 +111,8 @@ class Network:
     def test_network_classification(self, test_data: np.ndarray, activation_function: [[np.ndarray], np.ndarray]):
         accurate = 0
         inaccurate = 0
+        wrongfully_classified = []
+        matrix = np.zeros((self.layers[-1].nr_of_neurons, self.layers[-1].nr_of_neurons), dtype=int)
         for index in range(len(test_data[0])):
             coordinates = test_data[0][index]
             actual_value = test_data[1][index]
@@ -116,6 +121,10 @@ class Network:
             prediction = np.argmax(prediction_probabilities)
             if actual_value == prediction:
                 accurate += 1
+                matrix[prediction][prediction] += 1
             else:
                 inaccurate += 1
-        return accurate, inaccurate
+                matrix[prediction][actual_value] += 1
+                wrongfully_classified.append((coordinates, actual_value))
+
+        return accurate, inaccurate, matrix, wrongfully_classified
