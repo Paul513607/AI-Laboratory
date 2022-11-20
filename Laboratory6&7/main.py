@@ -36,4 +36,5 @@ if __name__ == '__main__':
     print("Test on test data ",
           best_epoch[0].test_network_classification(test_data, utils.sigmoid_activation))
 
-    utils.plot_points_and_wrongfully_classified_points(test_data, best_epoch)
+    utils.plot_points_and_wrongfully_classified_points(test_data, 'sepal length', 'sepal width', best_epoch)
+    utils.plot_points_and_wrongfully_classified_points(test_data, 'petal length', 'petal width', best_epoch)
