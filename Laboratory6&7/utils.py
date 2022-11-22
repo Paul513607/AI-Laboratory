@@ -60,16 +60,22 @@ def plot_confusion_matrix(best_epoch):
     # pprint(confusion_matrix)
 
 
-def plot_points_and_wrongfully_classified_points(test_data, best_epoch):
+attrs = ['sepal length', 'sepal width', 'petal length', 'petal width']
+
+
+def plot_points_and_wrongfully_classified_points(test_data, attr1, attr2, best_epoch):
+    idx1, idx2 = attrs.index(attr1), attrs.index(attr2)
     class_labels = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
     cmap = plt.get_cmap('viridis')
     norm = plt.Normalize(test_data[1].min(), test_data[1].max())
-    plt.scatter(test_data[0][:, 0], test_data[0][:, 1], c=test_data[1], cmap='viridis', norm=norm)
+    plt.scatter(test_data[0][:, idx1], test_data[0][:, idx2], c=test_data[1], cmap='viridis', norm=norm)
     handles = [plt.Line2D([0, 0], [0, 0], color=cmap(norm(i)), marker='o', linestyle='', label=label)
                for i, label in enumerate(class_labels)]
     plt.legend(handles=handles, title='Species')
+    plt.xlabel(attr1)
+    plt.ylabel(attr2)
 
     wrongfully_classified = best_epoch[2][3]
     for item in wrongfully_classified:
-        plt.plot(item[0][0], item[0][1], color='red', marker='x', markersize=10)
+        plt.plot(item[0][idx1], item[0][idx2], color='red', marker='x', markersize=10)
     plt.show()
