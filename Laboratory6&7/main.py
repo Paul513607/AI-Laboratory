@@ -19,8 +19,8 @@ if __name__ == '__main__':
     network = Network([4, 4, 3], 0.5, nr_of_epochs)
     epochs = network.network_training(train_data, test_data, utils.sigmoid_activation)
     best_epoch = min(epochs.values(), key=lambda x: x[1])
-    for idx, epoch in enumerate(epochs.values()):
-        print("Epoch ", idx, ":", 'error - ', epoch[1], ', (acc, inacc)')
+    for idx, epoch in epochs.items():
+        print("Epoch ", idx, ":", 'error - ', epoch[1], ', (acc, inacc)', '(' , epoch[2][0] , ', ' , epoch[2][1] ,')')
     epoch_nums = epochs.keys()
     epoch_vals = [epoch[1] for epoch in epochs.values()]
     epoch_vals_2 = [epoch[2][0] / (len(test_data[0])) for epoch in epochs.values()]
