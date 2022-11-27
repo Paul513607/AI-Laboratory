@@ -52,6 +52,7 @@ class QLearning:
                 valid_actions.add(action)
         return valid_actions
 
+    # This function sets the q_value of unreachable states to -np.inf
     def remove_unreachable_states(self):
         for state in self.q_table.keys():
             valid_actions = self.get_valid_actions(state)
@@ -66,11 +67,13 @@ class QLearning:
     def update_q_table(self, curr_state: tuple, action: tuple):
         action_index = self.actions.index(action)
         next_state = self.get_next_state(curr_state, action)
+        # Q(s, a) = Q(s, a) + alpha * (reward + gamma * max(Q(s', a')) - Q(s, a))
         new_q_value = self.q_table[curr_state[0], curr_state[1]][action_index] + self.alpha * ( \
                 self.reward_table[next_state[0], next_state[1]] + self.gamma * max( \
                 self.q_table[next_state[0], next_state[1]]) - self.q_table[curr_state[0], curr_state[1]][action_index])
         self.q_table[curr_state[0], curr_state[1]][action_index] = new_q_value
 
+    # epsilon-greedy choice
     def get_action(self, curr_state: tuple) -> tuple:
         if np.random.uniform() < self.epsilon:
             action_index = np.argmax(self.q_table[curr_state[0], curr_state[1]])
@@ -89,6 +92,7 @@ class QLearning:
                 curr_state = self.get_next_state(curr_state, action)
                 if curr_state in self.danger_states:
                     curr_state = self.start_state
+            # epsilon decay
             self.epsilon *= 0.9
             print(f"Episode {episode + 1} finished")
 
