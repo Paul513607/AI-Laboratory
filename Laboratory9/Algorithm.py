@@ -19,6 +19,7 @@ class QLearning:
         self.reward_table = np.ones((4, 12), dtype=int) * -1
         for i in range(1, 11):
             self.reward_table[3, i] = -100
+        self.reward_table[3, 11] = 0
         self.start_state = start_state
         self.episode_ends = [(3, 11)]
         self.episodes = episodes
