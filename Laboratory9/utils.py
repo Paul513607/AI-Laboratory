@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
@@ -14,6 +15,7 @@ def display_grid(grid, title):
 
 
 def display_grids_with_slider(grids):
+    matplotlib.use('TkAgg')
     grid = grids[0]
     width = len(grid[0])
     height = len(grid)
