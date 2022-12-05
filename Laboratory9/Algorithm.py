@@ -79,6 +79,15 @@ class QLearning:
                 self.q_table[next_state[0], next_state[1]]) - self.q_table[curr_state[0], curr_state[1]][action_index])
         self.q_table[curr_state[0], curr_state[1]][action_index] = new_q_value
 
+    def update_q_table_sarsa(self, curr_state: tuple, action: tuple, next_state: tuple, next_action: tuple):
+        action_index = self.actions.index(action)
+        next_action_index = self.actions.index(next_action)
+        # Q(s, a) = Q(s, a) + alpha * (reward + gamma * Q(s', a') - Q(s, a))
+        new_q_value = self.q_table[curr_state[0], curr_state[1]][action_index] + self.alpha * ( \
+                    self.reward_table[next_state[0], next_state[1]] + self.gamma * self.q_table[next_state[0],
+                    next_state[1]][next_action_index] - self.q_table[curr_state[0], curr_state[1]][action_index])
+        self.q_table[curr_state[0], curr_state[1]][action_index] = new_q_value
+
     # epsilon-greedy choice
     def get_action(self, curr_state: tuple) -> tuple:
         if np.random.uniform() < self.epsilon:
@@ -103,12 +112,49 @@ class QLearning:
             print(f"Episode {episode + 1} finished")
             self.episodes_qtable += [self.q_table_to_states_values(self.q_table)]
 
+    def train_sarsa(self):
+        for episode in range(self.episodes):
+            curr_state = self.start_state
+            action = self.get_action(curr_state)
+            while curr_state not in self.episode_ends:
+                while action not in self.get_valid_actions(curr_state):
+                    action = self.get_action(curr_state)
+                next_state = self.get_next_state(curr_state, action)
+                next_action = self.get_action(next_state)
+                while next_action not in self.get_valid_actions(next_state):
+                    next_action = self.get_action(next_state)
+                self.update_q_table_sarsa(curr_state, action, next_state, next_action)
+                curr_state = next_state
+                action = next_action
+                if curr_state in self.danger_states:
+                    curr_state = self.start_state
+            # epsilon decay
+            self.epsilon *= 0.9
+            print(f"Episode {episode + 1} finished")
+            self.episodes_qtable += [self.q_table_to_states_values(self.q_table)]
+
     def get_path(self):
         curr_state = self.start_state
         path = [curr_state]
         while curr_state not in self.episode_ends:
             action = self.actions[np.argmax(self.q_table[curr_state[0], curr_state[1]])]
             curr_state = self.get_next_state(curr_state, action)
+            path.append(curr_state)
+        return path
+
+    def get_mirrored_action(self, action: tuple) -> tuple:
+        return -action[0], -action[1]
+
+    def get_path_sarsa(self):
+        curr_state = self.start_state
+        path = [curr_state]
+        q_table_copy = self.q_table.copy()
+        while curr_state not in self.episode_ends:
+            action_idx = np.argmax(q_table_copy[curr_state[0], curr_state[1]])
+            action = self.actions[action_idx]
+            curr_state = self.get_next_state(curr_state, action)
+            mirrored_action_idx = self.actions.index(self.get_mirrored_action(action))
+            q_table_copy[curr_state[0], curr_state[1]][mirrored_action_idx] = -np.inf
             path.append(curr_state)
         return path
 
