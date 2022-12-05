@@ -1,3 +1,4 @@
+import numpy
 import numpy as np
 import gymnasium as gym
 
@@ -10,6 +11,7 @@ class QLearning:
     start_state: tuple
     episode_ends: list
     episodes: int
+    episodes_qtable: list
     epsilon: float
     alpha: float
     gamma: float
@@ -29,7 +31,7 @@ class QLearning:
         self.epsilon = epsilon
         self.alpha = alpha
         self.gamma = gamma
-
+        self.episodes_qtable = []
         self.actions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         self.q_table = {}
         for i in range(4):
@@ -99,6 +101,7 @@ class QLearning:
             # epsilon decay
             self.epsilon *= 0.9
             print(f"Episode {episode + 1} finished")
+            self.episodes_qtable += [self.q_table_to_states_values(self.q_table)]
 
     def get_path(self):
         curr_state = self.start_state
@@ -118,6 +121,28 @@ class QLearning:
             env_action = map_action_to_number(action)
             curr_state = self.get_next_state(curr_state, action)
             env.step(env_action)
+
+    def q_table_to_states_values(self, q_table):
+        col_count, row_count = 12, 4
+        states_values = [[0 for x in range(col_count)] for y in range(row_count)]
+        # up = self.actions.index((-1, 0))
+        # right = self.actions.index((0, 1))
+        # down = self.actions.index((1, 0))
+        # left = self.actions.index((0, -1))
+        for i in range(row_count):
+            for j in range(col_count):
+                # vals = []
+                # if i > 0:
+                #     vals += [q_table[i - 1, j][down]]
+                # if i < row_count - 2:
+                #     vals += [q_table[i + 1, j][up]]
+                # if j > 0:
+                #     vals += [q_table[i, j - 1][right]]
+                # if j < col_count - 2:
+                #     vals += [q_table[i, j + 1][left]]
+                # states_values[i][j] += sum([0 if val is numpy.NINF else val for val in vals])
+                states_values[i][j] = np.ma.masked_invalid(q_table[i, j]).sum()
+        return states_values
 
 
 def map_action_to_number(action):
