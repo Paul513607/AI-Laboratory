@@ -7,3 +7,4 @@ if __name__ == '__main__':
     algorithm.train()
     path = algorithm.get_path()
     print(path)
+    algorithm.render_politic()

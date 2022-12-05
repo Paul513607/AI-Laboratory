@@ -1,4 +1,7 @@
 import numpy as np
+import gymnasium as gym
+
+env = gym.make('CliffWalking-v0', render_mode='human')
 
 
 class QLearning:
@@ -70,7 +73,7 @@ class QLearning:
         next_state = self.get_next_state(curr_state, action)
         # Q(s, a) = Q(s, a) + alpha * (reward + gamma * max(Q(s', a')) - Q(s, a))
         new_q_value = self.q_table[curr_state[0], curr_state[1]][action_index] + self.alpha * ( \
-                self.reward_table[next_state[0], next_state[1]] + self.gamma * max( \
+                    self.reward_table[next_state[0], next_state[1]] + self.gamma * max( \
                 self.q_table[next_state[0], next_state[1]]) - self.q_table[curr_state[0], curr_state[1]][action_index])
         self.q_table[curr_state[0], curr_state[1]][action_index] = new_q_value
 
@@ -106,3 +109,30 @@ class QLearning:
             path.append(curr_state)
         return path
 
+    def render_politic(self):
+        env.reset()
+        env.render()
+        curr_state = self.start_state
+        while curr_state not in self.episode_ends:
+            action = self.actions[np.argmax(self.q_table[curr_state[0], curr_state[1]])]
+            env_action = map_action_to_number(action)
+            curr_state = self.get_next_state(curr_state, action)
+            env.step(env_action)
+
+
+def map_action_to_number(action):
+    # There are 4 discrete deterministic actions:
+    # 0: move up
+    # 1: move right
+    # 2: move down
+    # 3: move left
+    if action == (-1, 0):
+        return 0
+    elif action == (0, 1):
+        return 1
+    elif action == (1, 0):
+        return 2
+    elif action == (0, -1):
+        return 3
+    else:
+        raise Exception('Invalid action: ' + action)
