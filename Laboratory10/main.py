@@ -1,11 +1,10 @@
 import rdflib
-import nltk
-from nltk.corpus import wordnet
+import pprint
 
 
 if __name__ == '__main__':
-    print("Hello world!")
-    #nltk.download('wordnet')
-    #nltk.download('omw-1.4')
-    syn_arr = wordnet.synsets('room')
-    print(syn_arr[2].definition())
+    graph = rdflib.Graph()
+    graph.parse(r"./data/food.rdf")
+    print("Length: ", len(graph))
+    for stmt in graph:
+        pprint.pprint(stmt)
