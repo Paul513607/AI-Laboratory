@@ -22,12 +22,13 @@ class Questionaire:
         question = ''
         question_triple: tuple
         if question_idx == 0:
-            question = 'Cine este in relatia {} cu {} in partea dreapta: '\
+            question = 'Cine este in relatia {} cu {} in partea dreapta: ' \
                 .format(self.graph.qname(pred), self.graph.qname(obj) if type(obj) is rdflib.URIRef else obj)
             question_triple = (None, pred, obj)
         elif question_idx == 1:
             question = 'Ce relatie este intre {} si {}: ' \
-                .format(self.graph.qname(subj) if type(subj) is rdflib.URIRef else subj, self.graph.qname(obj) if type(obj) is rdflib.URIRef else obj)
+                .format(self.graph.qname(subj) if type(subj) is rdflib.URIRef else subj,
+                        self.graph.qname(obj) if type(obj) is rdflib.URIRef else obj)
             question_triple = (subj, None, obj)
         elif question_idx == 2:
             question = 'Cine este in relatia {} cu {} in partea stanga: ' \
@@ -37,16 +38,19 @@ class Questionaire:
 
     def validate_question_answer(self, question_triple, answer):
         found = None
+
+        def find_answer(generator):
+            for x in generator:
+                if answer == (self.graph.qname(x) if type(x) is rdflib.URIRef else x):
+                    return x
+            return None
+
         if question_triple[0] is None:
-            found = self.graph.value(predicate=question_triple[1], object=question_triple[2], default=None, any=True)
+            subj_generator = self.graph.subjects(predicate=question_triple[1], object=question_triple[2])
+            found = find_answer(subj_generator)
         elif question_triple[1] is None:
             pred_generator = self.graph.predicates(subject=question_triple[0], object=question_triple[2])
-            for pred in pred_generator:
-                found = pred
-                if answer == self.graph.qname(pred):
-                    return True, found
-            return False, found
-
+            found = find_answer(pred_generator)
         elif question_triple[2] is None:
             found = self.graph.value(subject=question_triple[0], predicate=question_triple[1], default=None, any=True)
 
@@ -54,4 +58,3 @@ class Questionaire:
             return answer == self.graph.qname(found), found
         else:
             return answer == found, found
-
