@@ -7,5 +7,11 @@ if __name__ == '__main__':
     # print(wordnet.synonyms(word))
     print('Cuvantul apartine urmatoarelor synseturi:')
     for synset in syn_arr:
-        print(synset)
+        print(synset.name())
         # print([str(lemma.name()) for lemma in synset.lemmas()])
+
+
+def get_synset(word):
+    syn_arr = wordnet.synsets(word)
+    return syn_arr
+

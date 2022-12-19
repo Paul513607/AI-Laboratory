@@ -44,8 +44,10 @@
        many of the wine properties.
        Rather than that, we could have used the following
        assertion for all of the shared concepts:
+
         <owl:Class rdf:ID="&vin;Wine"/>
-       The reason for this is that in DL all referenced 
+
+       The reason for this is that in DL all referenced
        elements must have a type.
   -->
 
@@ -72,7 +74,7 @@
     <rdfs:domain rdf:resource="#MealCourse" />
     <rdfs:range rdf:resource="#PotableLiquid" />
   </owl:ObjectProperty>
-  
+
   <owl:Thing rdf:ID="White">
     <owl:sameAs rdf:resource="&vin;White"/>
   </owl:Thing>
@@ -125,11 +127,11 @@
     <rdfs:domain rdf:resource="#Meal" />
     <rdfs:range rdf:resource="#MealCourse" />
   </owl:ObjectProperty>
-  
+
   <owl:Class rdf:ID="Grape">
     <rdfs:subClassOf rdf:resource="#SweetFruit" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="Pasta">
     <rdfs:subClassOf rdf:resource="#EdibleThing" />
     <owl:disjointWith rdf:resource="#Meat" />
@@ -138,12 +140,12 @@
     <owl:disjointWith rdf:resource="#Dessert" />
     <owl:disjointWith rdf:resource="#Fruit" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithWhiteSauce">
     <rdfs:subClassOf rdf:resource="#Pasta" />
     <owl:disjointWith rdf:resource="#PastaWithRedSauce" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithSpicyRedSauceCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -197,15 +199,15 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithSpicyRedSauce">
     <rdfs:subClassOf rdf:resource="#PastaWithRedSauce" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithRedSauce">
     <rdfs:subClassOf rdf:resource="#Pasta" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithNonSpicyRedSauceCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -259,17 +261,17 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithNonSpicyRedSauce">
     <rdfs:subClassOf rdf:resource="#PastaWithRedSauce" />
     <owl:disjointWith rdf:resource="#PastaWithSpicyRedSauce" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithLightCreamSauce">
     <rdfs:subClassOf rdf:resource="#PastaWithWhiteSauce" />
     <owl:disjointWith rdf:resource="#PastaWithHeavyCreamSauce" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithLightCreamCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -323,11 +325,11 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithHeavyCreamSauce">
     <rdfs:subClassOf rdf:resource="#PastaWithWhiteSauce" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="PastaWithHeavyCreamCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -381,7 +383,7 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="OysterShellfishCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -402,11 +404,11 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="OysterShellfish">
     <rdfs:subClassOf rdf:resource="#Shellfish" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="OtherTomatoBasedFoodCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -460,7 +462,7 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="OtherTomatoBasedFood">
     <rdfs:subClassOf rdf:resource="#EdibleThing" />
     <owl:disjointWith rdf:resource="#Pasta" />
@@ -470,7 +472,7 @@
     <owl:disjointWith rdf:resource="#Dessert" />
     <owl:disjointWith rdf:resource="#Fruit" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonSweetFruitCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -502,7 +504,7 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="SweetFruitCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -534,19 +536,19 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
-  <!-- changed so that Fruit can be unionOf 
+
+  <!-- changed so that Fruit can be unionOf
   <owl:Class rdf:ID="NonSweetFruit">
     <rdfs:subClassOf rdf:resource="#Fruit" />
     <owl:disjointWith rdf:resource="#SweetFruit" />
   </owl:Class>
   -->
-  
+
   <owl:Class rdf:ID="NonSweetFruit">
     <rdfs:subClassOf rdf:resource="#EdibleThing" />
     <owl:disjointWith rdf:resource="#SweetFruit" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonSpicyRedMeatCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -607,12 +609,12 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonSpicyRedMeat">
     <rdfs:subClassOf rdf:resource="#RedMeat" />
     <owl:disjointWith rdf:resource="#SpicyRedMeat" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonRedMeatCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -666,12 +668,12 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonRedMeat">
     <rdfs:subClassOf rdf:resource="#Meat" />
     <owl:disjointWith rdf:resource="#RedMeat" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonOysterShellfishCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -692,12 +694,12 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonOysterShellfish">
     <rdfs:subClassOf rdf:resource="#Shellfish" />
     <owl:disjointWith rdf:resource="#OysterShellfish" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonBlandFishCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -718,11 +720,11 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="NonBlandFish">
     <rdfs:subClassOf rdf:resource="#Fish" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="Meat">
     <rdfs:subClassOf rdf:resource="#EdibleThing" />
     <owl:disjointWith rdf:resource="#Fowl" />
@@ -730,7 +732,7 @@
     <owl:disjointWith rdf:resource="#Dessert" />
     <owl:disjointWith rdf:resource="#Fruit" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="MealCourse">
     <rdfs:subClassOf rdf:resource="#ConsumableThing" />
     <rdfs:subClassOf>
@@ -754,7 +756,7 @@
     <owl:disjointWith rdf:resource="#PotableLiquid" />
     <owl:disjointWith rdf:resource="#EdibleThing" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="Meal">
     <rdfs:subClassOf rdf:resource="#ConsumableThing" />
     <rdfs:subClassOf>
@@ -773,7 +775,7 @@
     <owl:disjointWith rdf:resource="#PotableLiquid" />
     <owl:disjointWith rdf:resource="#EdibleThing" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="LightMeatFowlCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -827,11 +829,11 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <owl:Class rdf:ID="LightMeatFowl">
     <rdfs:subClassOf rdf:resource="#Fowl" />
   </owl:Class>
-  
+
   <owl:Class rdf:ID="FruitCourse">
     <owl:intersectionOf rdf:parseType="Collection">
       <owl:Class rdf:about="#MealCourse" />
@@ -863,12 +865,14 @@
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  
+
   <!--- Replaced so that we have a unionOf construct
-        Aug 20 02 MKS, suggestion by R. Volz.  
+        Aug 20 02 MKS, suggestion by R. Volz.
+
   <owl:Class rdf:ID="Fruit">
     <rdfs:subClassOf rdf:resource="#EdibleThing" />
   </owl:Class>
+
   --> 
   
   <owl:Class rdf:ID="Fruit">
