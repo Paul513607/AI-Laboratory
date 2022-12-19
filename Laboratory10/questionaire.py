@@ -72,6 +72,16 @@ class Questionaire:
         for synset in get_synset(found):
             if answer.lower() == synset.name().split(".")[0]:
                 return True
+            hypernyms = synset.hypernyms()
+            for hypernym in hypernyms:
+                if answer.lower() == hypernym.name().split(".")[0]:
+                    print("Validated as hypernym")
+                    return True
+            meronyms = synset.part_meronyms()
+            for meronym in meronyms:
+                if answer.lower() == meronym.name().split(".")[0]:
+                    print("Validated as meronym")
+                    return True
         return False
 
     def validate_question_answer(self, question_triple, answer):
