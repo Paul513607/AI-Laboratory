@@ -40,10 +40,12 @@ class Questionaire:
         found = None
 
         def find_answer(generator):
+            wrong_answer = None
             for x in generator:
                 if answer == (self.graph.qname(x) if type(x) is rdflib.URIRef else x):
                     return x
-            return None
+                wrong_answer = x
+            return wrong_answer
 
         if question_triple[0] is None:
             subj_generator = self.graph.subjects(predicate=question_triple[1], object=question_triple[2])

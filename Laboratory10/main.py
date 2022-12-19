@@ -25,7 +25,7 @@ if __name__ == '__main__':
         if correct:
             print('Correct answer')
         else:
-            print('Wrong answer, correct is ' + (found if type(found) is not rdflib.URIRef else questionaire.graph.qname(found)))
+            print('Wrong answer, correct is ' + (str(found) if type(found) is not rdflib.URIRef else questionaire.graph.qname(found)))
         should_terminate = input('Terminate program?(Y/n)')
         if should_terminate.lower() == 'y':
             break
